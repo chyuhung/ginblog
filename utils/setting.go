@@ -9,7 +9,6 @@ var (
 	AppMode  string
 	HttpPort string
 
-	Db         string
 	DbHost     string
 	DbPort     string
 	DbUser     string
@@ -30,7 +29,6 @@ func LoadServer(file *ini.File) {
 	HttpPort = file.Section("server").Key("HttpPort").MustString("3000")
 }
 func LoadData(file *ini.File) {
-	Db = file.Section("database").Key("Db").MustString("mysql")
 	DbHost = file.Section("database").Key("DbHost").MustString("localhost")
 	DbPort = file.Section("database").Key("DbPort").MustString("3306")
 	DbUser = file.Section("database").Key("DbUser").MustString("ginblog")
