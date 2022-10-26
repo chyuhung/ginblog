@@ -29,7 +29,10 @@ func InitDb() {
 	if err != nil {
 		fmt.Println("数据库错误:", err)
 	}
-	db.AutoMigrate(&User{}, &Category{}, &Article{})
+	err = db.AutoMigrate(&User{}, &Category{}, &Article{})
+	if err != nil {
+		fmt.Println("迁移数据库错误:", err)
+	}
 
 	// SetMaxIdleConns 用于设置连接池中空闲连接的最大数量。
 	sqlDB.SetMaxIdleConns(10)

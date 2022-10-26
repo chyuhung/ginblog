@@ -14,6 +14,7 @@ var (
 	DbUser     string
 	DbPassWord string
 	DbName     string
+	JwtKey     string
 )
 
 func init() {
@@ -27,6 +28,7 @@ func init() {
 func LoadServer(file *ini.File) {
 	AppMode = file.Section("server").Key("AppMode").MustString("debug")
 	HttpPort = file.Section("server").Key("HttpPort").MustString("3000")
+	HttpPort = file.Section("server").Key("JwtKey").MustString("123")
 }
 func LoadData(file *ini.File) {
 	DbHost = file.Section("database").Key("DbHost").MustString("localhost")
