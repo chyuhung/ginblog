@@ -15,22 +15,20 @@ var code int
 
 type MyClaims struct {
 	Username string `json:"username"`
-	Password string `json:"password"`
 	jwt.StandardClaims
 }
 
 // SetToken 生成token
-func SetToken(username string, password string) (string, int) {
+func SetToken(username string) (string, int) {
 	expireTime := time.Now().Add(10 * time.Hour)
 	SetClaims := MyClaims{
 		Username: username,
-		Password: password,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
 			Issuer:    "ginblog",
 		},
 	}
-	reqClaim := jwt.NewWithClaims(jwt.SigningMethodES256, SetClaims)
+	reqClaim := jwt.NewWithClaims(jwt.SigningMethodHS256, SetClaims)
 	token, err := reqClaim.SignedString(JwtKey)
 	if err != nil {
 		return "", errmsg.ERROR
@@ -60,21 +58,33 @@ func JwtToken() gin.HandlerFunc {
 		userToken := strings.SplitN(tokenHeader, " ", 2)
 		if len(userToken) != 2 && userToken[0] != "Bearer" {
 			code = errmsg.ERROR_TOKEN_TYPE_WRONG
+			c.JSON(http.StatusOK, gin.H{
+				"code":    code,
+				"message": errmsg.GetErrMsg(code),
+			})
 			c.Abort()
+			return
 		}
-		key, Tcode := checkToken(userToken[1])
-		if Tcode == errmsg.ERROR {
+		key, tCode := checkToken(userToken[1])
+		if tCode == errmsg.ERROR {
 			code = errmsg.ERROR_TOKEN_WRONG
+			c.JSON(http.StatusOK, gin.H{
+				"code":    code,
+				"message": errmsg.GetErrMsg(code),
+			})
 			c.Abort()
+			return
 		}
 		if time.Now().Unix() > key.ExpiresAt {
 			code = errmsg.ERROR_TOKEN_RUNTIME
+			c.JSON(http.StatusOK, gin.H{
+				"code":    code,
+				"message": errmsg.GetErrMsg(code),
+			})
 			c.Abort()
+			return
 		}
-		c.JSON(http.StatusOK, gin.H{
-			"code":    code,
-			"message": errmsg.GetErrMsg(code),
-		})
+
 		c.Set("username", key.Username)
 		c.Next()
 	}
