@@ -28,7 +28,7 @@ func init() {
 func LoadServer(file *ini.File) {
 	AppMode = file.Section("server").Key("AppMode").MustString("debug")
 	HttpPort = file.Section("server").Key("HttpPort").MustString("3000")
-	HttpPort = file.Section("server").Key("JwtKey").MustString("Hy3qsRrp@k")
+	JwtKey = file.Section("server").Key("JwtKey").MustString("Hy3qsRrp@k")
 }
 func LoadData(file *ini.File) {
 	DbHost = file.Section("database").Key("DbHost").MustString("localhost")

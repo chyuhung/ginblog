@@ -11,7 +11,7 @@ import (
 )
 
 var JwtKey = []byte(utils.JwtKey)
-var code int
+var code int //错误代码
 
 type MyClaims struct {
 	Username string `json:"username"`
@@ -62,8 +62,8 @@ func JwtToken() gin.HandlerFunc {
 				"code":    code,
 				"message": errmsg.GetErrMsg(code),
 			})
-			c.Abort()
-			return
+			c.Abort() // 终止剩余/后续中间件，当前中间件剩余代码会继续执行
+			return    //终止当前中间件
 		}
 		key, tCode := checkToken(userToken[1])
 		if tCode == errmsg.ERROR {
@@ -86,6 +86,6 @@ func JwtToken() gin.HandlerFunc {
 		}
 
 		c.Set("username", key.Username)
-		c.Next()
+		c.Next() // 暂停当前中间件代码，执行后续中间件和控制器
 	}
 }
