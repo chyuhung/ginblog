@@ -53,7 +53,13 @@ func JwtToken() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tokenHeader := c.Request.Header.Get("Authorization")
 		if tokenHeader == "" {
-			code = errmsg.ERROR_TOKEN_EXIST
+			code = errmsg.ERROR_TOKEN_NOT_EXIST
+			c.JSON(http.StatusOK, gin.H{
+				"code":    code,
+				"message": errmsg.GetErrMsg(code),
+			})
+			c.Abort() // 终止剩余/后续中间件，当前中间件剩余代码会继续执行
+			return    //终止当前中间件
 		}
 		userToken := strings.SplitN(tokenHeader, " ", 2)
 		if len(userToken) != 2 && userToken[0] != "Bearer" {
@@ -62,8 +68,8 @@ func JwtToken() gin.HandlerFunc {
 				"code":    code,
 				"message": errmsg.GetErrMsg(code),
 			})
-			c.Abort() // 终止剩余/后续中间件，当前中间件剩余代码会继续执行
-			return    //终止当前中间件
+			c.Abort()
+			return
 		}
 		key, tCode := checkToken(userToken[1])
 		if tCode == errmsg.ERROR {
