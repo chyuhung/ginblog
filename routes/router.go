@@ -9,10 +9,13 @@ import (
 
 func InitRouter() {
 	gin.SetMode(utils.AppMode)
-	r := gin.Default()
+	r := gin.New()
+	r.Use(middleware.Logger())
+	r.Use(gin.Recovery())
 
 	auth := r.Group("api/v1")
 	auth.Use(middleware.JwtToken())
+
 	{
 		// User 模块路由接口
 		// 所有用户列表
