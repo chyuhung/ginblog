@@ -32,18 +32,19 @@ func CreateArticle(data *Article) int {
 }
 
 // GetCategoryArticle 查询分类下所有文章
-func GetCategoryArticle(id int, pageSize int, pageNum int) ([]Article, int) {
+func GetCategoryArticle(id int, pageSize int, pageNum int) ([]Article, int, int64) {
 	var categoryArticleList []Article
+	var total int64
 	// 偏移量，置为-1表示取消分页功能
 	offset := (pageNum - 1) * pageSize
 	if pageNum == -1 && pageSize == -1 {
 		offset = -1
 	}
-	err = db.Preload("Category").Limit(pageSize).Offset(offset).Where("cid = ?", id).Find(&categoryArticleList).Error
+	err = db.Preload("Category").Limit(pageSize).Offset(offset).Where("cid = ?", id).Find(&categoryArticleList).Count(&total).Error
 	if err != nil {
-		return categoryArticleList, errmsg.ERROR_CATEGORY_NOT_EXIST
+		return categoryArticleList, errmsg.ERROR_CATEGORY_NOT_EXIST, 0
 	}
-	return categoryArticleList, errmsg.SUCCSE
+	return categoryArticleList, errmsg.SUCCSE, total
 }
 
 // GetArticleInfo 查询单个文章
@@ -57,18 +58,19 @@ func GetArticleInfo(id int) (Article, int) {
 }
 
 // GetArticle 查询文章列表
-func GetArticle(pageSize int, pageNum int) ([]Article, int) {
+func GetArticle(pageSize int, pageNum int) ([]Article, int, int64) {
 	var articleList []Article
+	var total int64
 	// 偏移量，置为-1表示取消分页功能
 	offset := (pageNum - 1) * pageSize
 	if pageNum == -1 && pageSize == -1 {
 		offset = -1
 	}
-	err = db.Preload("Category").Limit(pageSize).Offset(offset).Find(&articleList).Error
+	err = db.Preload("Category").Limit(pageSize).Offset(offset).Find(&articleList).Count(&total).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
-		return nil, errmsg.ERROR
+		return nil, errmsg.ERROR, 0
 	}
-	return articleList, errmsg.SUCCSE
+	return articleList, errmsg.SUCCSE, total
 }
 
 // EditArticle 编辑文章

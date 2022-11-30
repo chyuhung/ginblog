@@ -38,18 +38,19 @@ func CreateCategory(data *Category) int {
 }
 
 // GetCategory 查询分类列表
-func GetCategory(pageSize int, pageNum int) []Category {
+func GetCategory(pageSize int, pageNum int) ([]Category, int64) {
 	var category []Category
+	var total int64
 	// 偏移量，置为-1表示取消分页功能
 	offset := (pageNum - 1) * pageSize
 	if pageNum == -1 && pageSize == -1 {
 		offset = -1
 	}
-	err = db.Limit(pageSize).Offset(offset).Find(&category).Error
+	err = db.Limit(pageSize).Offset(offset).Find(&category).Count(&total).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
-		return nil
+		return nil, 0
 	}
-	return category
+	return category, total
 }
 
 // EditCategory 编辑分类
