@@ -2,6 +2,7 @@ package model
 
 import (
 	"ginblog/utils/errmsg"
+
 	"gorm.io/gorm"
 )
 
@@ -13,6 +14,11 @@ type Article struct {
 	Desc     string   `gorm:"type:varchar(200)" json:"desc"`
 	Content  string   `gorm:"type:longtext" json:"content"`
 	Img      string   `gorm:"type:varchar(100)" json:"img"`
+}
+
+// 迁移数据库自动命名单数形式
+func (Article) TableName() string {
+	return "article"
 }
 
 // GetArticleCid 获取文章cid

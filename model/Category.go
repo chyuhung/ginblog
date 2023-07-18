@@ -2,6 +2,7 @@ package model
 
 import (
 	"ginblog/utils/errmsg"
+
 	"gorm.io/gorm"
 )
 
@@ -9,6 +10,11 @@ type Category struct {
 	// 分类结构简单，数据量小，不适用软删除等，仅保留关键属性
 	ID   uint   `gorm:"primary_key;auto_increment" json:"id"`
 	Name string `gorm:"type:varchar(20);not null" json:"name"`
+}
+
+// 迁移数据库自动命名单数形式
+func (Category) TableName() string {
+	return "category"
 }
 
 // GetCategoryName 获取分类名称

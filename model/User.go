@@ -16,6 +16,11 @@ type User struct {
 	Role     int    `gorm:"type:int;default:2" json:"role" validate:"required,gte=2" label:"角色码"`
 }
 
+// 迁移数据库自动命名单数形式
+func (User) TableName() string {
+	return "user"
+}
+
 // 数据库操作
 
 // GetUsername 获取用户名
@@ -28,7 +33,7 @@ func GetUsername(id int) string {
 // CheckUser 查询用户是否存在
 func CheckUser(name string) int {
 	var user User
-	db.Select("id").Where("username = ? ", name).First(&user)
+	db.Select("id").Where("username = ?", name).First(&user)
 	if user.ID > 0 {
 		return errmsg.ERROR_USERNAME_UESD
 	}

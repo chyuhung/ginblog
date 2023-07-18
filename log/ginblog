@@ -1,0 +1,9 @@
+time="2023-07-17T14:05:11+08:00" level=info Agent=PostmanRuntime-ApipostRuntime/1.1.0 DataSize=54 Hostname=DESKTOP-O2F62UU IP=127.0.0.1 Method=POST Path=/api/v1/login SpendTime="25 ms" Status=200
+time="2023-07-17T14:05:19+08:00" level=info Agent=PostmanRuntime-ApipostRuntime/1.1.0 DataSize=51 Hostname=DESKTOP-O2F62UU IP=127.0.0.1 Method=POST Path=/api/v1/user/add SpendTime="2 ms" Status=200
+time="2023-07-17T14:07:47+08:00" level=info Agent=PostmanRuntime-ApipostRuntime/1.1.0 DataSize=51 Hostname=DESKTOP-O2F62UU IP=127.0.0.1 Method=POST Path=/api/v1/user/add SpendTime="2 ms" Status=200
+0
+time="2023-07-17T11:57:58+08:00" level=info Agent=PostmanRuntime-ApipostRuntime/1.1.0 DataSize=51 Hostname=DESKTOP-O2F62UU IP=127.0.0.1 Method=POST Path=/api/v1/user/add SpendTime="1 ms" Status=200
+time="2023-07-17T11:57:58+08:00" level=info Agent=PostmanRuntime-ApipostRuntime/1.1.0 DataSize=51 Hostname=DESKTOP-O2F62UU IP=127.0.0.1 Method=POST Path=/api/v1/user/add SpendTime="0 ms" Status=200
+time="2023-07-17T11:57:59+08:00" level=info Agent=PostmanRuntime-ApipostRuntime/1.1.0 DataSize=51 Hostname=DESKTOP-O2F62UU IP=127.0.0.1 Method=POST Path=/api/v1/user/add SpendTime="0 ms" Status=200
+time="2023-07-17T11:57:59+08:00" level=info Agent=PostmanRuntime-ApipostRuntime/1.1.0 DataSize=51 Hostname=DESKTOP-O2F62UU IP=127.0.0.1 Method=POST Path=/api/v1/user/add SpendTime="1 ms" Status=200
+time="2023-07-17T11:58:09+08:00" level=info Agent=PostmanRuntime-ApipostRuntime/1.1.0 DataSize=54 Hostname=DESKTOP-O2F62UU IP=127.0.0.1 Method=POST Path=/api/v1/login SpendTime="3 ms" Status=200
