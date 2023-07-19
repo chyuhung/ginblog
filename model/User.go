@@ -13,7 +13,7 @@ type User struct {
 	gorm.Model
 	Username string `gorm:"type:varchar(20);not null" json:"username" validate:"required,min=4,max=12" label:"用户名"`
 	Password string `gorm:"type:varchar(20);not null" json:"password" validate:"required,min=6,max=20" label:"密码"`
-	Role     int    `gorm:"type:int;default:2" json:"role" validate:"required,gte=2" label:"角色码"`
+	Role     int    `gorm:"type:int;default:2"  json:"role,omitempty" validate:"min=0,max=2" default:"2" label:"角色码"`
 }
 
 // 迁移数据库自动命名单数形式
