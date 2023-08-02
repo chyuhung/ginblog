@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="loginBox">
-      <a-form-model :rules="rules" :model="formdata" class="loginForm">
+      <a-form-model ref="loginFormRef" :rules="rules" :model="formdata" class="loginForm">
         <a-form-model-item prop="username">
           <a-input v-model="formdata.username" placeholder="用户名">
             <a-icon slot="prefix" type="user" style="color: rgba(0, 0, 0, 0.25)"
@@ -13,8 +13,8 @@
           /></a-input>
         </a-form-model-item>
         <a-form-model-item class="loginBtn">
-          <a-button type="primary" style="margin: 10px">登录</a-button>
-          <a-button type="info" style="margin: 10px">取消</a-button>
+          <a-button type="primary" style="margin: 10px" @click="login">登录</a-button>
+          <a-button type="info" style="margin: 10px" @click="resetForm">取消</a-button>
         </a-form-model-item>
       </a-form-model>
     </div>
@@ -42,18 +42,15 @@ export default {
     }
   },
   methods: {
-    onSubmit() {
-      this.$refs.ruleForm.validate((valid) => {
-        if (valid) {
-          alert('submit!')
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
     resetForm() {
-      this.$refs.ruleForm.resetFields()
+      this.$refs.loginFormRef.resetFields()
+    },
+    login() {
+      this.$refs.loginFormRef.validate(async (valid) => {
+        if (!valid) return this.$message.error('输入不合规，请按要求修改')
+        const res = await this.$http.post('login', this.formdata)
+        console.log(res)
+      })
     }
   }
 }
