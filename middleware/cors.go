@@ -1,9 +1,10 @@
 package middleware
 
 import (
+	"time"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"time"
 )
 
 // Cors 跨域
@@ -13,7 +14,7 @@ func Cors() gin.HandlerFunc {
 			// AllowAllOrigins:        true,
 			AllowOrigins: []string{"*"},
 			AllowMethods: []string{"*"},
-			AllowHeaders: []string{"Origin"},
+			AllowHeaders: []string{"Origin", "Content-Type"},
 			// AllowCredentials: true,
 			ExposeHeaders: []string{"Content-Length", "Authorization"},
 			MaxAge:        12 * time.Hour,
