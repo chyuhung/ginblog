@@ -9,6 +9,7 @@ import (
 
 // Cors 跨域
 func Cors() gin.HandlerFunc {
+	//return cors.Default()
 	return func(c *gin.Context) {
 		cors.New(cors.Config{
 			AllowAllOrigins:  true,
