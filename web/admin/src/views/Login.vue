@@ -44,6 +44,20 @@ export default {
       }
     }
   },
+  mounted() {
+    const handleKeyPress = (event) => {
+      if (event.key === 'Enter') {
+        this.login()
+      }
+    }
+    window.addEventListener('keydown', handleKeyPress)
+    // 在组件实例上存储处理函数的引用，以便在销毁时使用
+    this._handleKeyPress = handleKeyPress
+  },
+  beforeDestroy() {
+    // 移除键盘事件监听
+    window.removeEventListener('keydown', this._handleKeyPress)
+  },
   methods: {
     resetForm() {
       this.$refs.loginFormRef.resetFields()
