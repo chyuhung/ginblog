@@ -2,17 +2,20 @@
   <div class="container">
     <div class="loginBox">
       <a-form-model ref="loginFormRef" :rules="rules" :model="formdata" class="loginForm">
+        <!-- 用户名输入框 -->
         <a-form-model-item prop="username">
           <a-input v-model="formdata.username" placeholder="用户名">
             <a-icon slot="prefix" type="user" style="color: rgba(0, 0, 0, 0.25)"
           /></a-input>
         </a-form-model-item>
+        <!-- 密码输入框 -->
         <a-form-model-item prop="password">
           <a-input v-model="formdata.password" placeholder="密码" type="password">
             <a-icon slot="prefix" type="lock" style="color: rgba(0, 0, 0, 0.25)"
           /></a-input>
         </a-form-model-item>
         <a-form-model-item class="loginBtn">
+          <!-- 登录和取消按钮 -->
           <a-button type="primary" style="margin: 10px" @click="login">登录</a-button>
           <a-button type="info" style="margin: 10px" @click="resetForm">取消</a-button>
         </a-form-model-item>
@@ -48,8 +51,12 @@ export default {
     login() {
       this.$refs.loginFormRef.validate(async (valid) => {
         if (!valid) return this.$message.error('输入不合规，请按要求修改')
-        const res = await this.$http.post('login', this.formdata)
-        console.log(res)
+        const { data: res } = await this.$http.post('login', this.formdata)
+        // console.log(res)
+        if (res.status !== 200) return this.$message.error(res.message)
+        window.sessionStorage.setItem('token', res.token)
+        this.$router.push('admin')
+        return this.$message.info('登录成功，欢迎回来')
       })
     }
   }
