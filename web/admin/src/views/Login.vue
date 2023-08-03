@@ -66,7 +66,7 @@ export default {
 <style scoped>
 .container {
   height: 100%;
-  background-color: rgb(75, 78, 106);
+  background-color: rgba(14, 19, 40, 0.687);
 }
 .loginBox {
   width: 450px;
@@ -74,7 +74,7 @@ export default {
   background-color: rgb(255, 255, 255);
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 70%;
   transform: translate(-50%, -50%);
   border-radius: 9px;
 }
