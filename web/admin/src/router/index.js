@@ -3,6 +3,13 @@ import VueRouter from 'vue-router'
 import Login from '../views/Login'
 import Admin from '../views/Admin'
 
+// 管理页面组件
+import Index from '../components/admin/Index'
+import ArtList from '../components/article/ArtList'
+import AddArt from '../components/article/AddArt'
+import CateList from '../components/category/CateList'
+import UserList from '../components/user/UserList'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -14,7 +21,14 @@ const routes = [
   {
     path: '/admin',
     name: 'Admin',
-    component: Admin
+    component: Admin,
+    children: [
+      { path: 'index', component: Index },
+      { path: 'addart', component: AddArt },
+      { path: 'artlist', component: ArtList },
+      { path: 'catelist', component: CateList },
+      { path: 'userlist', component: UserList }
+    ]
   }
 ]
 
