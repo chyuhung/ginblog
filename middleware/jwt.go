@@ -3,11 +3,12 @@ package middleware
 import (
 	"ginblog/utils"
 	"ginblog/utils/errmsg"
-	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
 )
 
 var JwtKey = []byte(utils.JwtKey)
@@ -41,11 +42,12 @@ func checkToken(tokenString string) (*MyClaims, int) {
 	token, _ := jwt.ParseWithClaims(tokenString, &MyClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return JwtKey, nil
 	})
-	if claims, ok := token.Claims.(*MyClaims); ok && token.Valid {
-		return claims, errmsg.SUCCSE
-	} else {
-		return nil, errmsg.ERROR
+	if token != nil {
+		if claims, ok := token.Claims.(*MyClaims); ok && token.Valid {
+			return claims, errmsg.SUCCSE
+		}
 	}
+	return nil, errmsg.ERROR
 }
 
 // JwtToken jwt中间件

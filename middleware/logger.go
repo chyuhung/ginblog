@@ -2,20 +2,21 @@ package middleware
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
-	lfshook "github.com/rifflock/lfshook"
 	"math"
 	"os"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
+	lfshook "github.com/rifflock/lfshook"
+	"github.com/sirupsen/logrus"
 )
-import "github.com/sirupsen/logrus"
 
 func Logger() gin.HandlerFunc {
 	filePath := "log/ginblog"
 	src, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE, 0755)
 	if err != nil {
-		fmt.Println("err：", err)
+		fmt.Println("err:", err)
 	}
 	logger := logrus.New()
 	logger.Out = src
