@@ -75,11 +75,12 @@ func GetUsers(pageSize int, pageNum int) ([]User, int64) {
 	var users []User
 	var total int64
 	// 偏移量，置为-1表示取消分页功能
-	offset := (pageNum - 1) * pageSize
-	if pageNum == -1 && pageSize == -1 {
-		offset = -1
-	}
-	err = db.Limit(pageSize).Offset(offset).Find(&users).Count(&total).Error
+	// offset := (pageNum - 1) * pageSize
+	// if pageNum == -1 && pageSize == -1 {
+	// 	offset = -1
+	// }
+	//err = db.Limit(pageSize).Offset(offset).Find(&users).Count(&total).Error
+	err = db.Table("user").Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&users).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, 0
 	}
