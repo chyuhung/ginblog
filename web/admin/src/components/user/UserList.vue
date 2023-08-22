@@ -11,7 +11,14 @@
         </a-col>
       </a-row>
       <a-row>
-        <a-table rowKey="username" :columns="columns" :pagination="paginationOption" :dataSource="userlist" bordered>
+        <a-table
+          :row-key="username"
+          :columns="columns"
+          :pagination="pagination"
+          :data-source="userlist"
+          @change="handleTableChange"
+          bordered
+        >
           <span slot="role" slot-scope="role">{{ role == 1 ? '管理员' : '订阅者' }}</span>
           <div class="actionSlot" slot="action">
             <a-button type="primary" style="margin-right: 15px">编辑</a-button>
@@ -59,26 +66,21 @@ const columns = [
 export default {
   data() {
     return {
-      paginationOption: {
+      pagination: {
         pageSizeOptions: ['5', '10', '20'],
-        defaultCurrent: 1,
-        defaultPageSize: 5,
+        current: 1,
+        pageSize: 5,
         total: 0,
         showSizeChanger: true,
         showTotal: (total) => `共${total}条`,
-        onChange: (current, pageSize) => {
-          this.paginationOption.defaultCurrent = current
-          this.paginationOption.defaultPageSize = pageSize
-          this.getUserList()
-        },
-        onShowSizeChange: (current, size) => {
-          this.paginationOption.defaultCurrent = current
-          this.paginationOption.defaultPageSize = size
-          this.getUserList()
-        }
+        showQuickJumper: true
       },
       userlist: [],
-      columns
+      columns,
+      queryParam: {
+        pagenum: 1,
+        pagesize: 5
+      }
     }
   },
   created() {
@@ -90,8 +92,8 @@ export default {
       try {
         const { data: res } = await this.$http.get('users', {
           params: {
-            pagesize: this.paginationOption.pageSize,
-            pagenum: this.paginationOption.current
+            pagesize: this.queryParam.pagesize,
+            pagenum: this.queryParam.pagenum
           },
           headers: {
             Authorization: `Bearer ${token}`
@@ -101,11 +103,23 @@ export default {
           return this.$message.error(res.message)
         }
         this.userlist = res.data
-        this.paginationOption.total = res.total
+        this.pagination.total = res.total
       } catch (error) {
         console.error(error)
-        // 处理错误
       }
+    },
+    handleTableChange(pagination, filters, sorter) {
+      const { current, pageSize } = pagination
+
+      if (pageSize !== this.pagination.pageSize) {
+        pagination.current = 1
+      }
+
+      this.pagination = pagination
+      this.queryParam.pagenum = current
+      this.queryParam.pagesize = pageSize
+
+      this.getUserList()
     }
   }
 }
