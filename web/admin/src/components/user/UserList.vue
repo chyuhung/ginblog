@@ -12,7 +12,11 @@
       </a-row>
       <a-row>
         <a-table rowKey="username" :columns="columns" :pagination="paginationOption" :dataSource="userlist" bordered>
-          <span></span>
+          <span slot="role" slot-scope="role">{{ role == 1 ? '管理员' : '订阅者' }}</span>
+          <div class="actionSlot" slot="action">
+            <a-button type="primary" style="margin-right: 15px">编辑</a-button>
+            <a-button type="danger">删除</a-button>
+          </div>
         </a-table>
       </a-row>
     </a-card>
@@ -25,24 +29,30 @@ const columns = [
     title: 'ID',
     dataIndex: 'ID',
     width: '10%',
-    key: 'id'
+    key: 'id',
+    align: 'center'
   },
   {
     title: '用户名',
     dataIndex: 'username',
     width: '20%',
-    key: 'username'
+    key: 'username',
+    align: 'center'
   },
   {
     title: '角色',
     dataIndex: 'role',
     width: '20%',
-    key: 'role'
+    key: 'role',
+    align: 'center',
+    scopedSlots: { customRender: 'role' }
   },
   {
     title: '操作',
     width: '20%',
-    key: 'action'
+    key: 'action',
+    align: 'center',
+    scopedSlots: { customRender: 'action' }
   }
 ]
 
