@@ -11,8 +11,92 @@
         </a-col>
       </a-row>
       <a-row>
-        <a-table></a-table>
+        <a-table rowKey="username" :columns="columns" :pagination="paginationOption" :dataSource="userlist" bordered>
+          <span></span>
+        </a-table>
       </a-row>
     </a-card>
   </div>
 </template>
+
+<script>
+const columns = [
+  {
+    title: 'ID',
+    dataIndex: 'ID',
+    width: '10%',
+    key: 'id'
+  },
+  {
+    title: '用户名',
+    dataIndex: 'username',
+    width: '20%',
+    key: 'username'
+  },
+  {
+    title: '角色',
+    dataIndex: 'role',
+    width: '20%',
+    key: 'role'
+  },
+  {
+    title: '操作',
+    width: '20%',
+    key: 'action'
+  }
+]
+
+export default {
+  data() {
+    return {
+      paginationOption: {
+        pageSizeOptions: ['5', '10', '20'],
+        defaultCurrent: 1,
+        defaultPageSize: 5,
+        total: 0,
+        showSizeChanger: true,
+        showTotal: (total) => `共${total}条`,
+        onChange: (current, pageSize) => {
+          this.paginationOption.defaultCurrent = current
+          this.paginationOption.defaultPageSize = pageSize
+          this.getUserList()
+        },
+        onShowSizeChange: (current, size) => {
+          this.paginationOption.defaultCurrent = current
+          this.paginationOption.defaultPageSize = size
+          this.getUserList()
+        }
+      },
+      userlist: [],
+      columns
+    }
+  },
+  created() {
+    this.getUserList()
+  },
+  methods: {
+    async getUserList() {
+      const token = sessionStorage.getItem('token')
+      try {
+        const { data: res } = await this.$http.get('users', {
+          params: {
+            pagesize: this.paginationOption.pageSize,
+            pagenum: this.paginationOption.current
+          },
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        if (res.status !== 200) {
+          return this.$message.error(res.message)
+        }
+        this.userlist = res.data
+        this.paginationOption.total = res.total
+      } catch (error) {
+        console.error(error)
+        // 处理错误
+      }
+    }
+  }
+}
+</script>
