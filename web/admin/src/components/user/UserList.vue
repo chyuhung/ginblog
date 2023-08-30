@@ -4,7 +4,13 @@
     <a-card>
       <a-row :gutter="20">
         <a-col :span="6">
-          <a-input-search placeholder="输入用户名查找" enter-button />
+          <a-input-search
+            v-model="queryParam.username"
+            placeholder="输入用户名查找"
+            enter-button="true"
+            allowClear="true"
+            @search="getUserList"
+          />
         </a-col>
         <a-col :span="4">
           <a-button type="primary">新增</a-button>
@@ -78,6 +84,7 @@ export default {
       userlist: [],
       columns,
       queryParam: {
+        username: '',
         pagenum: 1,
         pagesize: 5
       }
@@ -92,6 +99,7 @@ export default {
       try {
         const { data: res } = await this.$http.get('users', {
           params: {
+            username: this.queryParam.username,
             pagesize: this.queryParam.pagesize,
             pagenum: this.queryParam.pagenum
           },
