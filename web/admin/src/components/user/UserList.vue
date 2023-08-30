@@ -4,13 +4,7 @@
     <a-card>
       <a-row :gutter="20">
         <a-col :span="6">
-          <a-input-search
-            v-model="queryParam.username"
-            placeholder="输入用户名查找"
-            enter-button="true"
-            allowClear="true"
-            @search="getUserList"
-          />
+          <a-input-search v-model="queryParam.username" placeholder="输入用户名查找" enter-button allowClear @search="getUserList" />
         </a-col>
         <a-col :span="4">
           <a-button type="primary">新增</a-button>
@@ -18,7 +12,7 @@
       </a-row>
       <a-row>
         <a-table
-          :row-key="username"
+          :row-key="(data) => data.username"
           :columns="columns"
           :pagination="pagination"
           :data-source="userlist"
@@ -26,10 +20,12 @@
           bordered
         >
           <span slot="role" slot-scope="role">{{ role == 1 ? '管理员' : '订阅者' }}</span>
-          <div class="actionSlot" slot="action">
-            <a-button type="primary" style="margin-right: 15px">编辑</a-button>
-            <a-button type="danger">删除</a-button>
-          </div>
+          <template slot="action" slot-scope="data">
+            <div class="actionSlot" slot="action">
+              <a-button type="primary" style="margin-right: 15px">编辑</a-button>
+              <a-button type="danger" @click="deleteUser(data.ID)">删除</a-button>
+            </div>
+          </template>
         </a-table>
       </a-row>
     </a-card>
@@ -95,26 +91,18 @@ export default {
   },
   methods: {
     async getUserList() {
-      const token = sessionStorage.getItem('token')
-      try {
-        const { data: res } = await this.$http.get('users', {
-          params: {
-            username: this.queryParam.username,
-            pagesize: this.queryParam.pagesize,
-            pagenum: this.queryParam.pagenum
-          },
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-        if (res.status !== 200) {
-          return this.$message.error(res.message)
+      const { data: res } = await this.$http.get('users', {
+        params: {
+          username: this.queryParam.username,
+          pagesize: this.queryParam.pagesize,
+          pagenum: this.queryParam.pagenum
         }
-        this.userlist = res.data
-        this.pagination.total = res.total
-      } catch (error) {
-        console.error(error)
+      })
+      if (res.status !== 200) {
+        return this.$message.error(res.message)
       }
+      this.userlist = res.data
+      this.pagination.total = res.total
     },
     handleTableChange(pagination, filters, sorter) {
       const { current, pageSize } = pagination
@@ -128,6 +116,20 @@ export default {
       this.queryParam.pagesize = pageSize
 
       this.getUserList()
+    },
+    // 删除用户
+    deleteUser(id) {
+      this.$confirm({
+        title: '警告：确定删除该用户吗？',
+        content: '删除后无法恢复',
+        onOk: async () => {
+          const res = await this.$http.delete(`/user/${id}`)
+          if (res.status !== 200) return this.$http.message.error(res.message)
+          this.$message.success('已删除')
+          this.getUserList()
+        },
+        onCancel() {}
+      })
     }
   }
 }

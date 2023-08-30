@@ -7,8 +7,16 @@ import './plugin/antui'
 import './assets/css/style.css'
 import 'ant-design-vue/dist/antd.css'
 
-Vue.prototype.$http = axios
 axios.defaults.baseURL = 'http://localhost:3000/api/v1'
+
+// 请求拦截器，添加token
+axios.interceptors.request.use((config) => {
+  // 获取token
+  const token = window.sessionStorage.getItem('token')
+  config.headers.Authorization = `Bearer ${token}`
+  return config
+})
+Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
 new Vue({
