@@ -7,7 +7,7 @@ body,
 }
 
 .ant-card {
-  margin: 10px;
+  margin: 15px;
   background-color: #fff;
 }
 
@@ -17,4 +17,7 @@ body,
 
 .ant-row {
   margin-top: 15px;
+}
+.ant-card-body {
+  padding-top: 10px;
 }
