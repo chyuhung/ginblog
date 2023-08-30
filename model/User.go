@@ -76,9 +76,9 @@ func GetUsers(username string, pageSize int, pageNum int) ([]User, int64) {
 	var total int64
 
 	if username == "" {
-		err = db.Table("user").Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&users).Error
+		err = db.Table("user").Where("deleted_at IS NULL").Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&users).Error
 	} else {
-		err = db.Table("user").Where("username Like ?", username+"%").Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&users).Error
+		err = db.Table("user").Where("username Like ?", username+"%").Where("deleted_at IS NULL").Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&users).Error
 	}
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, 0
